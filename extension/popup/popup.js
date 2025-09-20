@@ -13,7 +13,7 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
 
     const testoFormatado = `
     <b>Potencialmente FakeNews?</b>${data['potencial_fake_news'] ? '<span class="highlight-yes">SIM!</span>' : '<span class="highlight-no">NÃO!</span>'}
-    <b>Confiança:</b>${data['pontuacao_confianca']*100}%
+    <b>Confiança na Análise:</b>${data['pontuacao_confianca']*100}%
     <b>Análise de Fontes:</b>${data['analise_fontes']}
     <b>Análise de Linguagem:</b>${data['analise_linguagem']}
     <b>Análise do Viés:</b>${data['analise_vies']}

@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import openai
 import json
-from transcribe import download_instagram_video, transcribe_audio_portuguese
+from transcribe import download_video, transcribe_audio_portuguese
 from dotenv import load_dotenv
 
 
@@ -83,7 +83,7 @@ def endpoint_analisar():
     if dados and 'video_url' in dados:
         video_url = dados['video_url']
         # Baixa o vídeo e transcreve
-        mp3_filename = download_instagram_video(video_url)
+        mp3_filename = download_video(video_url)
         texto = transcribe_audio_portuguese(mp3_filename)
     elif dados and 'texto_transcrito' in dados:
         texto = dados['texto_transcrito']

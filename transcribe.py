@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 def sanitize_filename(title):
     return re.sub(r'[^A-Za-z0-9_.-]', '_', title)
 
-def download_instagram_video(video_url=None):
+def download_video(video_url=None):
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
@@ -23,12 +23,21 @@ def download_instagram_video(video_url=None):
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(url, download=True)
+
+        # yt-dlp returns the final filename after post-processing
+        if "requested_downloads" in info_dict:
+            downloaded_file = info_dict["requested_downloads"][0]["filepath"]
+        else:
+            downloaded_file = info_dict.get("_filename", None)
+
+        if not downloaded_file:
+            raise RuntimeError("Não foi possível determinar o nome do arquivo baixado.")
+
+        # Sanitize to ensure safe naming
         original_title = info_dict.get('title', 'video')
         safe_title = sanitize_filename(original_title)
         mp3_filename = f"{safe_title}.mp3"
 
-        # The file already exists as '<original_title>.mp3', rename it if needed
-        downloaded_file = f"{original_title}.mp3"
         if downloaded_file != mp3_filename:
             os.rename(downloaded_file, mp3_filename)
 
@@ -60,6 +69,6 @@ def transcribe_audio_portuguese(filename):
 
 
 if __name__ == "__main__":
-    audio_file = download_instagram_video()
+    audio_file = download_video()
     transcription = transcribe_audio_portuguese(audio_file)
     print("Transcrição:\n", transcription)

@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="./extension/image/LOGO_PROJETO.png" alt="texto alternativo" width="50%" height="50%">
+</p>
+
+O GnomeCheck é uma ferramenta criada pelos Gnomos para combater a desinformação em plataformas de vídeos curtos. Ele transcreve o áudio do vídeo e, com auxílio de IA, avalia a confiabilidade das informações considerando fontes citadas, viéses na fala e alarmismo.
+
 ## 📝 》Requisitos
 
 - Google Chrome

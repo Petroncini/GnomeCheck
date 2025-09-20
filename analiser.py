@@ -40,7 +40,7 @@ def analisar_texto_com_ia(texto_transcrito: str) -> dict:
 
     Responda em português e formate a saída como um objeto JSON com as seguintes chaves:
     -   "potencial_fake_news": (booleano, true se houver alta probabilidade, false caso contrário)
-    -   "pontuacao_confianca": (um float de 0.0 a 1.0, onde 0.0 é muito provável ser fake news e 1.0 é muito improvável)
+    -   "pontuacao_confianca": (um float de 0.0 a 1.0, indicando o nível de confiança na análise, onde 0.0 é nenhuma confiança e 1.0 é total confiança)
     -   "analise_fontes": (uma string com sua análise sobre as fontes)
     -   "analise_linguagem": (uma string com sua análise sobre a linguagem)
     -   "analise_vies": (uma string com sua análise sobre o viés político)

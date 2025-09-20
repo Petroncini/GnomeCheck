@@ -2,11 +2,15 @@ import os
 from flask import Flask, request, jsonify
 import openai
 import json
+from transcribe import download_instagram_video, transcribe_audio_portuguese
+from dotenv import load_dotenv
+
 
 # --- Configuração Inicial ---
 # Crie uma variável de ambiente chamada 'OPENAI_API_KEY' com sua chave da OpenAI.
 # Ou, para um teste rápido (não recomendado para produção), substitua pela sua chave:
 # openai.api_key = "SUA_CHAVE_DE_API_AQUI"
+load_dotenv()  # Carrega variáveis do arquivo .env
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Inicializa a aplicação Flask
@@ -69,33 +73,33 @@ def analisar_texto_com_ia(texto_transcrito: str) -> dict:
 @app.route('/analisarer', methods=['POST'])
 def endpoint_analisar():
     """
-    Endpoint que recebe o JSON com o texto transcrito e retorna a análise.
+    Endpoint que recebe o JSON com o texto transcrito ou link do vídeo e retorna a análise.
     """
-    # 1. Pega o JSON do corpo da requisição
     dados = request.get_json()
 
-    # 2. Valida se o JSON foi recebido e se contém a chave esperada
-    if not dados or 'texto_transcrito' not in dados:
-        # Retorna um erro 400 (Bad Request) se o formato for inválido
-        return jsonify({"erro": "JSON inválido. A chave 'texto_transcrito' é obrigatória."}), 400
+    # Se receber um link de vídeo, faz o download e transcrição
+    if dados and 'video_url' in dados:
+        video_url = dados['video_url']
+        # Baixa o vídeo e transcreve
+        mp3_filename = download_instagram_video(video_url)
+        texto = transcribe_audio_portuguese(mp3_filename)
+    elif dados and 'texto_transcrito' in dados:
+        texto = dados['texto_transcrito']
+    else:
+        return jsonify({"erro": "JSON inválido. É obrigatório fornecer 'texto_transcrito' ou 'video_url'."}), 400
 
-    texto = dados['texto_transcrito']
-    
-    # Valida se o texto não está vazio
-    if not texto.strip():
+    if not texto or not texto.strip():
         return jsonify({"erro": "O valor de 'texto_transcrito' não pode ser vazio."}), 400
 
-    # 3. Chama a função que usa a IA para analisar o texto
-    print(f"Recebido para análise: {texto[:100]}...") # Log para o console
+    print(f"Recebido para análise: {texto[:100]}...")
     resultado_analise = analisar_texto_com_ia(texto)
 
-    # 4. Retorna o resultado da análise como JSON
     if "erro" in resultado_analise:
-        # Retorna um erro 500 (Internal Server Error) se algo deu errado na análise
         return jsonify(resultado_analise), 500
-    
+
     print("Análise concluída com sucesso.")
     return jsonify(resultado_analise), 200
+# ...existing cod
 
 
 # --- Execução da Aplicação ---

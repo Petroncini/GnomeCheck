@@ -49,6 +49,12 @@ def transcribe_audio_portuguese(filename):
             file=audio_file,
             language="pt"
         )
+    # Delete the audio file after transcription
+    try:
+        os.remove(filename)
+    except Exception as e:
+        print(f"Erro ao deletar o arquivo de áudio: {e}")
+
     return response.text
 
 

@@ -1,41 +1,45 @@
-<h1 align="center" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-  <img src="/extension/image/gnomo_icon.png" alt="GnomeCheck" width="40" height="40">
-  GnomeCheck
-</h1>
+## 📝 》Requisitos
 
+- Google Chrome
+- Python 3.8 ou superior
+- [pip](https://pip.pypa.io/en/stable/installation/)
+- Token OPENAI_API_KEY no .env
 
-<p align="center">The WeatherBot is a bot on Discord that aims to inform the weather of the region chosen by the user and on the day of the week selected by them; this option is not necessary, and if left blank, it returns the current day.</p>
+## 📖 》Rodando Localmente (Flask)
 
-## 📝 》Requirements
+### Instalação de Dependências
 
-- latest LTS version of [Node.js](https://nodejs.org/pt)
-- Discord Token. Get it from [Discord Developers Portal](https://discord.com/developers/applications)
-- ClientID `for loading slash commands`. [Discord Developers Portal](https://discord.com/developers/applications)
-- Tomorrow.io API KEY `for get information about weather`. [Tomorrow.io](https://www.tomorrow.io/)
-
-## 📖 》Installation Guide
-
-### Installing via [NPM](https://www.npmjs.com/)
-
-Clone the repo by running
+Clone o repositório:
 ```
-git clone https://github.com/JuanHPassos/WeatherBot 
-```
-After cloning fill all requirement in config.json (rename configexample.json to config.json), then run
-```
-npm install
-```
-To start your bot
-```
-node src/index.js
+git clone https://github.com/Petroncini/GnomeCheck.git
+cd GnomeCheck
 ```
 
-## 💻 》How to use
+Crie e ative um ambiente virtual (opcional, mas recomendado):
+```
+python3 -m venv venv
+source venv/bin/activate
+```
 
-Just type the command '/weather' and write the desired city. The day option is not mandatory, and if it is not chosen, the current day is chosen.
+Instale as dependências:
+```
+pip install -r requirements.txt
+```
 
-![ExampleofUse](https://github.com/JuanHPassos/WeatherBot/blob/main/img/WeatherBotImage.png)
+### Iniciando o servidor Flask (macos ou linux)
 
-![ExampleofResponse](https://github.com/JuanHPassos/WeatherBot/blob/main/img/WeatherBotResponse.png)
+```
+python3 analiser.py
+```
 
-# References
+Acesse o servidor local em [http://127.0.0.1:5000](http://127.0.0.1:5000).
+
+## 💻 》Como usar
+
+- Abra o Google Chrome
+- Acesse [chrome://extensions/](chrome://extensions/)
+- Ative o "Developer Mode"
+- Clique em "Load Unpack"
+- Selecione a pasta extension
+- Agora a extensão já está carregada
+- Finalmente, clique no ícone e envie uma link de reels/shorts

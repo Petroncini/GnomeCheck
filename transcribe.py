@@ -2,7 +2,6 @@ import re
 import yt_dlp
 import os
 from openai import OpenAI
-import json 
 from dotenv import load_dotenv
 
 def sanitize_filename(title):

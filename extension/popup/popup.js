@@ -5,7 +5,7 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
 
   try {
     // Replace with your backend URL
-    const res = await fetch('https://your-backend-url.com/check', {
+    const res = await fetch('http://127.0.0.1:8000/process', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ link })

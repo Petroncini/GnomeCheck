@@ -1,6 +1,8 @@
-![GnomoChecker](https://capsule-render.vercel.app/api?type=waving&color=timeAuto&height=300&section=header&text=WeatherBot&fontSize=90)
+<h1 align="center" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+  <img src="/extension/image/gnomo_icon.png" alt="GnomeCheck" width="40" height="40">
+  GnomeCheck
+</h1>
 
-<h3 align="center">WeatherBot</h3>
 
 <p align="center">The WeatherBot is a bot on Discord that aims to inform the weather of the region chosen by the user and on the day of the week selected by them; this option is not necessary, and if left blank, it returns the current day.</p>
 

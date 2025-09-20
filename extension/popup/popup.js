@@ -1,8 +1,7 @@
 document.getElementById('sendBtn').addEventListener('click', async () => {
   const link = document.getElementById('linkInput').value;
-  const fakenewsDiv = document.getElementById('fakenews');
-  const resumoDiv = document.getElementById('resumo');
-  responseDiv.textContent = 'Checking...';
+  const responseDiv = document.getElementById('response');
+  responseDiv.textContent = 'Verificando vídeo...';
 
   try {
     const res = await fetch('http://127.0.0.1:5000/analiser', {

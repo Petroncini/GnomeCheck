@@ -1,7 +1,7 @@
 body {
   font-family: 'Arial', sans-serif;
   margin: 16px;
-  background: #f8f9fa;
+  background: #f55f5f;
   min-width: 300px;
   color: #333;
 }
@@ -14,8 +14,8 @@ body {
 }
 
 .logo {
-  width: 32px;
-  height: 32px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
 }
 
@@ -34,7 +34,8 @@ input[type="text"]:focus {
   box-shadow: 0 0 5px rgba(0, 120, 212, 0.3);
 }
 
-button {
+/* Botão azul arredondado (enviar texto) */
+.send-btn {
   padding: 8px 12px;
   border: none;
   border-radius: 50%;
@@ -48,11 +49,11 @@ button {
   transition: background 0.2s;
 }
 
-button:hover:not(:disabled) {
+.send-btn:hover:not(:disabled) {
   background: #005a9e;
 }
 
-button:disabled {
+.send-btn:disabled {
   background: #aaa;
   cursor: not-allowed;
 }
@@ -68,4 +69,29 @@ button:disabled {
   transition: max-height 0.3s ease;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+/* Ícone genérico */
+.icon {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+
+/* Botão de ícone sem fundo */
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  opacity: 1;
+}
+
+.icon-btn:hover {
+  transform: scale(1.05); /* cresce levemente no hover */
+}
+
+.icon-btn:active {
+  transform: scale(0.9); /* encolhe no clique */
 }

@@ -5,7 +5,7 @@ import os
 def sanitize_filename(title):
     return re.sub(r'[^A-Za-z0-9_.-]', '_', title)
 
-def download_instagram_video():
+def download_instagram_video(video_url):
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
@@ -16,7 +16,7 @@ def download_instagram_video():
         'outtmpl': '%(title)s.%(ext)s',  # download template
     }
 
-    url = input("Insira o link do vídeo do Instagram: ")
+    url = video_url or input("Insira o link do vídeo do Instagram: ")
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(url, download=True)

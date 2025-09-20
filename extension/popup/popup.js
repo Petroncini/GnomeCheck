@@ -1,7 +1,7 @@
 document.getElementById('sendBtn').addEventListener('click', async () => {
   const link = document.getElementById('linkInput').value;
   const responseDiv = document.getElementById('response');
-  responseDiv.textContent = 'Checking...';
+  responseDiv.textContent = 'Verificando vídeo...';
 
   try {
     // Replace with your backend URL

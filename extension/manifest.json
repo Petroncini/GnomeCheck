@@ -5,6 +5,7 @@
   "description": "The best fact checker on the market.",
   "permissions": ["activeTab", "scripting"],
   "action": {
-    "default_popup": "popup/popup.html"
+    "default_popup": "popup/popup.html",
+    "default_icon": "image/megaphone.png"
   }
 }

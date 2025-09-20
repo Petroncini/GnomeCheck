@@ -1,11 +1,14 @@
 import re
 import yt_dlp
 import os
+from openai import OpenAI
+import json 
+from dotenv import load_dotenv
 
 def sanitize_filename(title):
     return re.sub(r'[^A-Za-z0-9_.-]', '_', title)
 
-def download_instagram_video():
+def download_instagram_video(video_url=None):
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
@@ -16,7 +19,7 @@ def download_instagram_video():
         'outtmpl': '%(title)s.%(ext)s',  # download template
     }
 
-    url = input("Insira o link do vídeo do Instagram: ")
+    url = video_url or input("Insira o link do vídeo do Instagram: ")
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(url, download=True)
@@ -32,11 +35,25 @@ def download_instagram_video():
     return mp3_filename
 
 def transcribe_audio_portuguese(filename):
-    import whisper
-    model = whisper.load_model("base")
-    result = model.transcribe(filename, language="pt")  # force Portuguese
-    print("Transcrição:\n", result["text"])
+    # Load .env file
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise RuntimeError("OPENAI_API_KEY environment variable not set.")
+
+    client = OpenAI(api_key=api_key)
+
+    with open(filename, "rb") as audio_file:
+        response = client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_file,
+            language="pt"
+        )
+    return response.text
+
+
 
 if __name__ == "__main__":
     audio_file = download_instagram_video()
-    transcribe_audio_portuguese(audio_file)
+    transcription = transcribe_audio_portuguese(audio_file)
+    print("Transcrição:\n", transcription)

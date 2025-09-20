@@ -1,6 +1,7 @@
 document.getElementById('sendBtn').addEventListener('click', async () => {
   const link = document.getElementById('linkInput').value;
-  const responseDiv = document.getElementById('response');
+  const fakenewsDiv = document.getElementById('fakenews');
+  const resumoDiv = document.getElementById('resumo');
   responseDiv.textContent = 'Checking...';
 
   try {

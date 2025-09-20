@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "GnomeChecker",
   "version": "1.0",
-  "description": "The best fact checker on the market.",
+  "description": "O melhor analisdor de fatos do mercado.",
   "permissions": ["activeTab", "scripting"],
   "action": {
     "default_popup": "popup/popup.html"

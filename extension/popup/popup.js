@@ -4,14 +4,13 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
   responseDiv.textContent = 'Checking...';
 
   try {
-    // Replace with your backend URL
-    const res = await fetch('http://127.0.0.1:8000/process', {
+    const res = await fetch('http://127.0.0.1:5000/analiser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ link })
+      body: JSON.stringify({ video_url: link })
     });
     const data = await res.json();
-    responseDiv.textContent = data.result || 'No result';
+    responseDiv.textContent = data['resumo'] || 'No result';
   } catch (err) {
     responseDiv.textContent = 'Error: ' + err.message;
   }

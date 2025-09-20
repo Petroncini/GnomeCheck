@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import openai
 import json
 from transcribe import download_instagram_video, transcribe_audio_portuguese
@@ -15,6 +16,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Inicializa a aplicação Flask
 app = Flask(__name__)
+CORS(app)
 
 # --- Lógica de Análise com a IA ---
 def analisar_texto_com_ia(texto_transcrito: str) -> dict:
@@ -70,7 +72,7 @@ def analisar_texto_com_ia(texto_transcrito: str) -> dict:
 
 
 # --- Endpoint da API ---
-@app.route('/analisarer', methods=['POST'])
+@app.route('/analiser', methods=['POST'])
 def endpoint_analisar():
     """
     Endpoint que recebe o JSON com o texto transcrito ou link do vídeo e retorna a análise.

@@ -3,3 +3,4 @@ flask_cors
 openai
 python-dotenv
 requests
+yt_dlp

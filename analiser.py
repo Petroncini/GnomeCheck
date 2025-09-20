@@ -1,0 +1,105 @@
+import os
+from flask import Flask, request, jsonify
+import openai
+import json
+
+# --- Configuração Inicial ---
+# Crie uma variável de ambiente chamada 'OPENAI_API_KEY' com sua chave da OpenAI.
+# Ou, para um teste rápido (não recomendado para produção), substitua pela sua chave:
+# openai.api_key = "SUA_CHAVE_DE_API_AQUI"
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Inicializa a aplicação Flask
+app = Flask(__name__)
+
+# --- Lógica de Análise com a IA ---
+def analisar_texto_com_ia(texto_transcrito: str) -> dict:
+    """
+    Envia o texto transcrito para a API da OpenAI para análise de fake news.
+    """
+    if not openai.api_key:
+        return {
+            "erro": "A chave da API da OpenAI não foi configurada. "
+                    "Defina a variável de ambiente OPENAI_API_KEY."
+        }
+
+    # O prompt é a instrução que damos ao modelo.
+    # Ele define o papel do modelo (um checador de fatos) e o que esperamos como resposta.
+    prompt_sistema = """
+    Você é um assistente especializado em identificar características de fake news em textos.
+    Analise o texto fornecido e avalie os seguintes critérios:
+    1.  **Ausência de Fontes:** O texto cita fontes de dados, especialistas ou estudos? Se sim, são fontes verificáveis ou genéricas (ex: "cientistas dizem")?
+    2.  **Linguagem de Alta Convicção:** O texto usa uma linguagem excessivamente emotiva, categórica ou alarmista (ex: "com certeza", "sem dúvida", "é um absurdo")?
+    3.  **Viés Político Forte:** O texto demonstra um posicionamento político claro e parcial, atacando ou defendendo um lado específico sem apresentar contrapontos?
+
+    Responda em português e formate a saída como um objeto JSON com as seguintes chaves:
+    -   "potencial_fake_news": (booleano, true se houver alta probabilidade, false caso contrário)
+    -   "pontuacao_confianca": (um float de 0.0 a 1.0, onde 0.0 é muito provável ser fake news e 1.0 é muito improvável)
+    -   "analise_fontes": (uma string com sua análise sobre as fontes)
+    -   "analise_linguagem": (uma string com sua análise sobre a linguagem)
+    -   "analise_vies": (uma string com sua análise sobre o viés político)
+    -   "resumo": (uma string com um resumo conclusivo da sua análise)
+    """
+
+    try:
+        # Fazendo a chamada para a API do ChatGPT
+        completion = openai.chat.completions.create(
+            model="gpt-4o-mini",  # Você pode usar "gpt-3.5-turbo" para uma opção mais rápida e barata
+            messages=[
+                {"role": "system", "content": prompt_sistema},
+                {"role": "user", "content": texto_transcrito}
+            ],
+            # Garante que a resposta da API será um objeto JSON válido
+            response_format={"type": "json_object"}
+        )
+        
+        # Extrai e carrega a resposta JSON do modelo
+        resposta_json = completion.choices[0].message.content
+        return json.loads(resposta_json)
+
+    except openai.APIError as e:
+        print(f"Erro na API da OpenAI: {e}")
+        return {"erro": f"Ocorreu um erro ao se comunicar com a API da OpenAI: {e}"}
+    except Exception as e:
+        print(f"Um erro inesperado ocorreu: {e}")
+        return {"erro": f"Ocorreu um erro inesperado durante a análise: {e}"}
+
+
+# --- Endpoint da API ---
+@app.route('/analisarer', methods=['POST'])
+def endpoint_analisar():
+    """
+    Endpoint que recebe o JSON com o texto transcrito e retorna a análise.
+    """
+    # 1. Pega o JSON do corpo da requisição
+    dados = request.get_json()
+
+    # 2. Valida se o JSON foi recebido e se contém a chave esperada
+    if not dados or 'texto_transcrito' not in dados:
+        # Retorna um erro 400 (Bad Request) se o formato for inválido
+        return jsonify({"erro": "JSON inválido. A chave 'texto_transcrito' é obrigatória."}), 400
+
+    texto = dados['texto_transcrito']
+    
+    # Valida se o texto não está vazio
+    if not texto.strip():
+        return jsonify({"erro": "O valor de 'texto_transcrito' não pode ser vazio."}), 400
+
+    # 3. Chama a função que usa a IA para analisar o texto
+    print(f"Recebido para análise: {texto[:100]}...") # Log para o console
+    resultado_analise = analisar_texto_com_ia(texto)
+
+    # 4. Retorna o resultado da análise como JSON
+    if "erro" in resultado_analise:
+        # Retorna um erro 500 (Internal Server Error) se algo deu errado na análise
+        return jsonify(resultado_analise), 500
+    
+    print("Análise concluída com sucesso.")
+    return jsonify(resultado_analise), 200
+
+
+# --- Execução da Aplicação ---
+if __name__ == '__main__':
+    # A aplicação rodará em http://127.0.0.1:5000
+    # O modo debug permite que as alterações no código reiniciem o servidor automaticamente
+    app.run(debug=True, port=5000)
